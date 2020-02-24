@@ -31,6 +31,7 @@ private slots:
        void processImage(QPixmap *);
        void processWeatherJson(QJsonObject *json);
        void processIcon(QPixmap *);
+       void processWeatherHourlyJson(QJsonObject *json);
 
 
        void setSeattleTime();

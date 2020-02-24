@@ -6,12 +6,15 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1090</width>
-    <height>806</height>
+    <width>1064</width>
+    <height>659</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>MainWindow</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true"/>
   </property>
   <widget class="QWidget" name="centralwidget">
    <widget class="QLabel" name="backgroundLabel">
@@ -20,194 +23,389 @@
       <x>0</x>
       <y>0</y>
       <width>1071</width>
-      <height>791</height>
+      <height>641</height>
      </rect>
     </property>
     <property name="text">
-     <string>TextLabel</string>
+     <string/>
     </property>
     <property name="scaledContents">
-     <bool>true</bool>
-    </property>
-   </widget>
-   <widget class="QLabel" name="mapLabel">
-    <property name="geometry">
-     <rect>
-      <x>120</x>
-      <y>110</y>
-      <width>301</width>
-      <height>221</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>map</string>
-    </property>
-    <property name="alignment">
-     <set>Qt::AlignCenter</set>
+     <bool>false</bool>
     </property>
    </widget>
    <widget class="QPushButton" name="seattleButton">
     <property name="geometry">
      <rect>
-      <x>120</x>
-      <y>360</y>
+      <x>130</x>
+      <y>60</y>
       <width>71</width>
-      <height>31</height>
+      <height>21</height>
      </rect>
     </property>
+    <property name="styleSheet">
+     <string notr="true">color:rgb(250,250,250);
+border:none;
+background-color: rgb(51, 167, 255);
+
+</string>
+    </property>
     <property name="text">
-     <string>Seattle</string>
+     <string>SEATTLE</string>
     </property>
    </widget>
    <widget class="QPushButton" name="japanButton">
     <property name="geometry">
      <rect>
-      <x>210</x>
-      <y>360</y>
-      <width>81</width>
-      <height>31</height>
+      <x>230</x>
+      <y>60</y>
+      <width>61</width>
+      <height>20</height>
      </rect>
     </property>
+    <property name="styleSheet">
+     <string notr="true">color:rgb(250,250,250);
+border:none;
+background-color: rgb(51, 167, 255);</string>
+    </property>
     <property name="text">
-     <string>Japan</string>
+     <string>JAPAN</string>
     </property>
    </widget>
    <widget class="QPushButton" name="londonButton">
     <property name="geometry">
      <rect>
-      <x>300</x>
-      <y>360</y>
-      <width>81</width>
-      <height>31</height>
+      <x>40</x>
+      <y>60</y>
+      <width>61</width>
+      <height>21</height>
      </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">color:rgb(250,250,250);
+border:none;
+background-color: rgb(51, 167, 255);</string>
     </property>
     <property name="text">
-     <string>London</string>
+     <string>LONDON</string>
     </property>
-   </widget>
-   <widget class="QGroupBox" name="clockGroupBox">
-    <property name="geometry">
-     <rect>
-      <x>100</x>
-      <y>410</y>
-      <width>341</width>
-      <height>121</height>
-     </rect>
-    </property>
-    <property name="title">
-     <string/>
-    </property>
-    <widget class="QLCDNumber" name="hourLcd">
-     <property name="geometry">
-      <rect>
-       <x>20</x>
-       <y>20</y>
-       <width>101</width>
-       <height>81</height>
-      </rect>
-     </property>
-     <property name="font">
-      <font>
-       <pointsize>8</pointsize>
-      </font>
-     </property>
-     <property name="digitCount">
-      <number>2</number>
-     </property>
-     <property name="value" stdset="0">
-      <double>11.000000000000000</double>
-     </property>
-    </widget>
-    <widget class="QLCDNumber" name="minuteLcd">
-     <property name="geometry">
-      <rect>
-       <x>130</x>
-       <y>20</y>
-       <width>101</width>
-       <height>81</height>
-      </rect>
-     </property>
-     <property name="font">
-      <font>
-       <pointsize>8</pointsize>
-      </font>
-     </property>
-     <property name="digitCount">
-      <number>2</number>
-     </property>
-     <property name="value" stdset="0">
-      <double>11.000000000000000</double>
-     </property>
-    </widget>
-    <widget class="QLCDNumber" name="secondLcd">
-     <property name="geometry">
-      <rect>
-       <x>240</x>
-       <y>40</y>
-       <width>61</width>
-       <height>51</height>
-      </rect>
-     </property>
-     <property name="font">
-      <font>
-       <pointsize>8</pointsize>
-      </font>
-     </property>
-     <property name="digitCount">
-      <number>2</number>
-     </property>
-     <property name="value" stdset="0">
-      <double>11.000000000000000</double>
-     </property>
-    </widget>
    </widget>
    <widget class="QLabel" name="tempLabel">
     <property name="geometry">
      <rect>
-      <x>210</x>
-      <y>560</y>
-      <width>71</width>
-      <height>51</height>
+      <x>30</x>
+      <y>500</y>
+      <width>181</width>
+      <height>111</height>
      </rect>
     </property>
+    <property name="font">
+     <font>
+      <family>Malgun Gothic</family>
+      <pointsize>36</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">    color: rgb(255,255, 255);    </string>
+    </property>
     <property name="text">
-     <string>weather temp</string>
+     <string>current</string>
     </property>
    </widget>
    <widget class="QLabel" name="conditionLabel">
     <property name="geometry">
      <rect>
-      <x>310</x>
+      <x>200</x>
       <y>560</y>
       <width>101</width>
-      <height>51</height>
+      <height>71</height>
      </rect>
     </property>
+    <property name="font">
+     <font>
+      <family>Malgun Gothic</family>
+      <pointsize>18</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">    color: rgb(255,255, 255);    </string>
+    </property>
     <property name="text">
-     <string>weather condition</string>
+     <string>condi</string>
     </property>
    </widget>
    <widget class="QLabel" name="iconLabel">
     <property name="geometry">
      <rect>
-      <x>310</x>
-      <y>610</y>
-      <width>91</width>
+      <x>220</x>
+      <y>510</y>
+      <width>101</width>
+      <height>81</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Malgun Gothic</family>
+      <pointsize>18</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">    color: rgb(255,255, 255);    </string>
+    </property>
+    <property name="text">
+     <string>icon</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="blurBackground">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>40</y>
+      <width>321</width>
+      <height>451</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color:rgb(195, 195, 195);
+border-radius:15px;</string>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
+   <widget class="QLabel" name="dateLabel">
+    <property name="geometry">
+     <rect>
+      <x>40</x>
+      <y>590</y>
+      <width>141</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Malgun Gothic</family>
+      <pointsize>10</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">color: rgb(255,255, 255);    
+
+border-radius: 15px;</string>
+    </property>
+    <property name="text">
+     <string>date</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+   </widget>
+   <widget class="QLCDNumber" name="hourLcd">
+    <property name="geometry">
+     <rect>
+      <x>40</x>
+      <y>110</y>
+      <width>101</width>
       <height>71</height>
      </rect>
     </property>
-    <property name="text">
-     <string>weather icon</string>
+    <property name="font">
+     <font>
+      <family>Malgun Gothic</family>
+      <pointsize>8</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
     </property>
+    <property name="styleSheet">
+     <string notr="true">QLCDNumber{
+    color: rgb(255,255, 255); 
+	border-color:rgb(51, 167, 255);   
+border-width : 1.2px;
+border-style:inset;
+}
+
+</string>
+    </property>
+    <property name="frameShape">
+     <enum>QFrame::WinPanel</enum>
+    </property>
+    <property name="frameShadow">
+     <enum>QFrame::Plain</enum>
+    </property>
+    <property name="digitCount">
+     <number>2</number>
+    </property>
+    <property name="value" stdset="0">
+     <double>11.000000000000000</double>
+    </property>
+   </widget>
+   <widget class="QLCDNumber" name="minuteLcd">
+    <property name="geometry">
+     <rect>
+      <x>160</x>
+      <y>110</y>
+      <width>101</width>
+      <height>71</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Malgun Gothic</family>
+      <pointsize>8</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QLCDNumber{
+    color: rgb(255,255, 255); 
+	border-color:rgb(51, 167, 255);   
+border-width : 1.2px;
+border-style:inset;
+}
+</string>
+    </property>
+    <property name="frameShape">
+     <enum>QFrame::Panel</enum>
+    </property>
+    <property name="frameShadow">
+     <enum>QFrame::Plain</enum>
+    </property>
+    <property name="digitCount">
+     <number>2</number>
+    </property>
+    <property name="value" stdset="0">
+     <double>11.000000000000000</double>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label">
+    <property name="geometry">
+     <rect>
+      <x>140</x>
+      <y>110</y>
+      <width>20</width>
+      <height>91</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Malgun Gothic</family>
+      <pointsize>28</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="frameShape">
+     <enum>QFrame::NoFrame</enum>
+    </property>
+    <property name="text">
+     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; color:#ffffff;&quot;&gt;:&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+   </widget>
+   <widget class="QLCDNumber" name="secondLcd">
+    <property name="geometry">
+     <rect>
+      <x>270</x>
+      <y>140</y>
+      <width>41</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>8</pointsize>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QLCDNumber{
+    color: rgb(255,255, 255); 
+	border-color:rgb(51, 167, 255);   
+border-width : 1.2px;
+border-style:inset;
+}</string>
+    </property>
+    <property name="frameShape">
+     <enum>QFrame::WinPanel</enum>
+    </property>
+    <property name="frameShadow">
+     <enum>QFrame::Plain</enum>
+    </property>
+    <property name="digitCount">
+     <number>2</number>
+    </property>
+    <property name="value" stdset="0">
+     <double>11.000000000000000</double>
+    </property>
+   </widget>
+   <widget class="QGroupBox" name="locationGroupBox">
+    <property name="geometry">
+     <rect>
+      <x>670</x>
+      <y>70</y>
+      <width>381</width>
+      <height>431</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">border-radius: 15px;</string>
+    </property>
+    <property name="title">
+     <string/>
+    </property>
+    <widget class="QLabel" name="mapLabel">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>50</y>
+       <width>351</width>
+       <height>311</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">border-radius: 15px;</string>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
    </widget>
    <widget class="QLineEdit" name="zipCodeEdit">
     <property name="geometry">
      <rect>
-      <x>850</x>
-      <y>70</y>
-      <width>61</width>
-      <height>21</height>
+      <x>740</x>
+      <y>40</y>
+      <width>191</width>
+      <height>31</height>
      </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>18</pointsize>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QLineEdit
+{
+background:transparent;
+color:rgb(255, 255, 255);
+
+}
+
+</string>
     </property>
     <property name="text">
      <string>98119</string>
@@ -216,23 +414,241 @@
    <widget class="QPushButton" name="locationButton">
     <property name="geometry">
      <rect>
-      <x>920</x>
-      <y>70</y>
-      <width>75</width>
-      <height>23</height>
+      <x>880</x>
+      <y>40</y>
+      <width>101</width>
+      <height>31</height>
      </rect>
     </property>
+    <property name="font">
+     <font>
+      <family>Malgun Gothic</family>
+      <pointsize>10</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">color:rgb(250,250,250);
+border:none;
+background-color: rgb(51, 167, 255);
+</string>
+    </property>
     <property name="text">
-     <string>Get Location</string>
+     <string>SEARCH</string>
+    </property>
+    <property name="iconSize">
+     <size>
+      <width>40</width>
+      <height>40</height>
+     </size>
     </property>
    </widget>
+   <widget class="QLabel" name="testLabel">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>510</y>
+      <width>1041</width>
+      <height>121</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color:rgb(195, 195, 195);
+border-radius:15px;</string>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
+   <widget class="QLabel" name="tempOneLabel">
+    <property name="geometry">
+     <rect>
+      <x>400</x>
+      <y>550</y>
+      <width>47</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">    color: rgb(255,255, 255);    </string>
+    </property>
+    <property name="text">
+     <string>temp</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="conditionLabel1">
+    <property name="geometry">
+     <rect>
+      <x>470</x>
+      <y>580</y>
+      <width>47</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">    color: rgb(255,255, 255);    </string>
+    </property>
+    <property name="text">
+     <string>condi1</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="tempLabel2">
+    <property name="geometry">
+     <rect>
+      <x>630</x>
+      <y>550</y>
+      <width>47</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">    color: rgb(255,255, 255);    </string>
+    </property>
+    <property name="text">
+     <string>temp1</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="conditionLabel2">
+    <property name="geometry">
+     <rect>
+      <x>710</x>
+      <y>580</y>
+      <width>47</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">    color: rgb(255,255, 255);    </string>
+    </property>
+    <property name="text">
+     <string>condi1</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="tempLabel3">
+    <property name="geometry">
+     <rect>
+      <x>840</x>
+      <y>550</y>
+      <width>47</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">    color: rgb(255,255, 255);    </string>
+    </property>
+    <property name="text">
+     <string>temp2</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="conditionLabel3">
+    <property name="geometry">
+     <rect>
+      <x>910</x>
+      <y>580</y>
+      <width>47</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">    color: rgb(255,255, 255);    </string>
+    </property>
+    <property name="text">
+     <string>comdi2</string>
+    </property>
+   </widget>
+   <widget class="Line" name="line">
+    <property name="geometry">
+     <rect>
+      <x>560</x>
+      <y>540</y>
+      <width>16</width>
+      <height>61</height>
+     </rect>
+    </property>
+    <property name="orientation">
+     <enum>Qt::Vertical</enum>
+    </property>
+   </widget>
+   <widget class="Line" name="line_2">
+    <property name="geometry">
+     <rect>
+      <x>790</x>
+      <y>540</y>
+      <width>16</width>
+      <height>61</height>
+     </rect>
+    </property>
+    <property name="orientation">
+     <enum>Qt::Vertical</enum>
+    </property>
+   </widget>
+   <widget class="Line" name="line_3">
+    <property name="geometry">
+     <rect>
+      <x>80</x>
+      <y>190</y>
+      <width>181</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="orientation">
+     <enum>Qt::Horizontal</enum>
+    </property>
+   </widget>
+   <widget class="QLabel" name="welcomeLabel">
+    <property name="geometry">
+     <rect>
+      <x>50</x>
+      <y>220</y>
+      <width>231</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">    color: rgb(255,255, 255); </string>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+   </widget>
+   <zorder>backgroundLabel</zorder>
+   <zorder>testLabel</zorder>
+   <zorder>blurBackground</zorder>
+   <zorder>seattleButton</zorder>
+   <zorder>japanButton</zorder>
+   <zorder>londonButton</zorder>
+   <zorder>tempLabel</zorder>
+   <zorder>conditionLabel</zorder>
+   <zorder>iconLabel</zorder>
+   <zorder>dateLabel</zorder>
+   <zorder>hourLcd</zorder>
+   <zorder>minuteLcd</zorder>
+   <zorder>label</zorder>
+   <zorder>secondLcd</zorder>
+   <zorder>locationGroupBox</zorder>
+   <zorder>zipCodeEdit</zorder>
+   <zorder>locationButton</zorder>
+   <zorder>tempOneLabel</zorder>
+   <zorder>conditionLabel1</zorder>
+   <zorder>tempLabel2</zorder>
+   <zorder>conditionLabel2</zorder>
+   <zorder>tempLabel3</zorder>
+   <zorder>conditionLabel3</zorder>
+   <zorder>line</zorder>
+   <zorder>line_2</zorder>
+   <zorder>line_3</zorder>
+   <zorder>welcomeLabel</zorder>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1090</width>
+     <width>1064</width>
      <height>22</height>
     </rect>
    </property>

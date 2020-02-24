@@ -4,6 +4,9 @@
 #include <QJsonObject>
 #include <QJsonArray>
 #include <QPixmap>
+#include <QGraphicsDropShadowEffect>
+#include <QGraphicsOpacityEffect>
+#include <QDate>
 
 
 MainWindow::MainWindow(QWidget *parent)
@@ -40,9 +43,60 @@ MainWindow::MainWindow(QWidget *parent)
     //weather signal
     connect(httpManager, SIGNAL(WeatherJsonReady(QJsonObject *)),
             this, SLOT(processWeatherJson(QJsonObject *)));
+    // weather hourly signal
+    connect(httpManager, SIGNAL(WeatherHourlyJsonReady(QJsonObject *)),
+            this, SLOT(processWeatherHourlyJson(QJsonObject *)));
     //icon signal
     connect(httpManager, SIGNAL(IconReady(QPixmap *)),
             this, SLOT(processIcon(QPixmap *)));
+
+    //enable MainWindow to be transparent
+    setAttribute(Qt::WA_TranslucentBackground);
+
+    // add drop shadow effect to map
+    QGraphicsDropShadowEffect* mapEffect = new QGraphicsDropShadowEffect();
+    mapEffect->setBlurRadius(10);
+    ui->locationGroupBox->setGraphicsEffect(mapEffect);
+    QGraphicsDropShadowEffect* locationEffect = new QGraphicsDropShadowEffect();
+    locationEffect->setBlurRadius(10);
+    ui->locationButton->setGraphicsEffect(locationEffect);
+    QGraphicsDropShadowEffect* jpanEffect = new QGraphicsDropShadowEffect();
+    QGraphicsDropShadowEffect* seattleEffect = new QGraphicsDropShadowEffect();
+    QGraphicsDropShadowEffect* londonEffect = new QGraphicsDropShadowEffect();
+    QGraphicsDropShadowEffect* hourEffect = new QGraphicsDropShadowEffect();
+    QGraphicsDropShadowEffect* minEffect = new QGraphicsDropShadowEffect();
+    QGraphicsDropShadowEffect* secEffect = new QGraphicsDropShadowEffect();
+    jpanEffect->setBlurRadius(10);
+    seattleEffect->setBlurRadius(10);
+    londonEffect->setBlurRadius(10);
+    hourEffect->setBlurRadius(10);
+    minEffect->setBlurRadius(10);
+    secEffect->setBlurRadius(10);
+    ui->japanButton->setGraphicsEffect(jpanEffect);
+    ui->seattleButton->setGraphicsEffect(seattleEffect);
+    ui->londonButton->setGraphicsEffect(londonEffect);
+    ui->hourLcd->setGraphicsEffect(hourEffect);
+    ui->minuteLcd->setGraphicsEffect(minEffect);
+    ui->secondLcd->setGraphicsEffect(secEffect);
+
+
+
+    //opacity background
+    QGraphicsOpacityEffect* effect = new QGraphicsOpacityEffect();
+    effect->setOpacity(0.4);
+    ui->blurBackground->setGraphicsEffect(effect);
+    QGraphicsOpacityEffect* effect1 = new QGraphicsOpacityEffect();
+    effect1->setOpacity(0.4);
+    ui->testLabel->setGraphicsEffect(effect1);
+
+
+
+    //display current date
+
+    QString s = QDate::currentDate().toString("MMMM, dddd,dd\n");
+    ui->dateLabel->setText(s);
+
+
 
 
 
@@ -78,6 +132,23 @@ void MainWindow::processWeatherJson(QJsonObject *json)
 
 
 }
+// getting weather info every 3 hours
+void MainWindow::processWeatherHourlyJson(QJsonObject *json)
+{
+    QString weatherone = json->value("list").toArray()[0].toObject()["weather"].toArray()[0].toObject()["main"].toString();
+    QString weathertwo = json->value("list").toArray()[1].toObject()["weather"].toArray()[0].toObject()["main"].toString();
+    QString weatherthree = json->value("list").toArray()[2].toObject()["weather"].toArray()[0].toObject()["main"].toString();
+    double temp1 = json->value("list").toArray()[0].toObject()["temp"].toDouble();
+    double temp2 = json->value("list").toArray()[1].toObject()["temp"].toDouble();
+    double temp3 = json->value("list").toArray()[2].toObject()["temp"].toDouble();
+
+    ui->tempOneLabel->setText(QString::number(temp1) + "°F");
+    ui->tempLabel2->setText(QString::number(temp2) + "°F");
+    ui->tempLabel3->setText(QString::number(temp3) + "°F");
+    ui->conditionLabel1->setText(weatherone);
+    ui->conditionLabel2->setText(weathertwo);
+    ui->conditionLabel3->setText(weatherthree);
+}
 
 void MainWindow::processIcon(QPixmap *icon)
 {
@@ -85,6 +156,8 @@ void MainWindow::processIcon(QPixmap *icon)
 }
 
 
+
+QString temp;
 //set timezone seattle
 void MainWindow::setSeattleTime()
 {
@@ -104,6 +177,7 @@ void MainWindow::setSeattleTime()
     if(japanTime->isActive()){
         japanTime->stop();
     }
+
 }
 
 //set timezone london
@@ -126,9 +200,11 @@ void MainWindow::setLondonTime()
         japanTime->stop();
     }
 
+
+
 }
 
-//set timezone jakarta
+//set timezone japan
 void MainWindow::setjapanTime()
 {
     QTime time = QTime::currentTime().addSecs(-32400);
@@ -147,6 +223,8 @@ void MainWindow::setjapanTime()
     if(londonTime->isActive()){
         londonTime->stop();
     }
+
+
 }
 
 
@@ -256,6 +334,7 @@ void MainWindow::on_locationButton_clicked()
 
     httpManager->mapRequest(zip);
     httpManager->sendWeatherRequest(zip);
+    httpManager->sendWeatherHourlyRequest(zip);
 
 }
 

@@ -6,7 +6,8 @@
 HTTPManager::HTTPManager(QObject *parent) : QObject(parent),
     imageDownloadManager(new QNetworkAccessManager),
     weatherApiManager(new QNetworkAccessManager),
-    iconDownloadManager(new QNetworkAccessManager)
+    iconDownloadManager(new QNetworkAccessManager),
+    weatherHourlyApiManager(new QNetworkAccessManager)
 {
     connect(imageDownloadManager, SIGNAL(finished(QNetworkReply*)),
             this, SLOT(ImageDownloadedHandler(QNetworkReply*)));
@@ -14,6 +15,8 @@ HTTPManager::HTTPManager(QObject *parent) : QObject(parent),
             this,SLOT(WeatherDownloadedHandler(QNetworkReply*)));
     connect(iconDownloadManager, SIGNAL(finished(QNetworkReply*)),
             this, SLOT(iconDownloadedHandler(QNetworkReply*)));
+    connect(weatherHourlyApiManager, SIGNAL(finished(QNetworkReply*)),
+            this, SLOT(WeatherHourlyDownloadHandler(QNetworkReply*)));
 }
 
 HTTPManager::~HTTPManager()
@@ -21,6 +24,7 @@ HTTPManager::~HTTPManager()
     delete imageDownloadManager;
     delete weatherApiManager;
     delete iconDownloadManager;
+    delete weatherHourlyApiManager;
 }
 
 void HTTPManager::sendImageRequest()
@@ -57,6 +61,15 @@ void HTTPManager::sendIconRequest(QString icon)
     request.setUrl(QUrl(address));
     iconDownloadManager->get(request);
 
+}
+
+void HTTPManager::sendWeatherHourlyRequest(QString zip)
+{
+    QNetworkRequest request;
+    QString address = "https://api.openweathermap.org/data/2.5/forecast?zip="
+            + zip + ",us&units=imperial&appid=7b85ea748cdb901069987d885f27b4ad";
+    request.setUrl(QUrl(address));
+    weatherHourlyApiManager->get(request);
 }
 
 void HTTPManager::ImageDownloadedHandler(QNetworkReply *reply)
@@ -100,6 +113,20 @@ void HTTPManager::iconDownloadedHandler(QNetworkReply *reply)
     reply->deleteLater();
 
     emit IconReady(image);
+}
+
+void HTTPManager::WeatherHourlyDownloadHandler(QNetworkReply *reply)
+{
+    if(reply->error()){
+        qDebug() << reply->errorString();
+        return;
+    }
+    QString answer = reply->readAll();
+    reply->deleteLater();
+    QJsonDocument jsonResponse = QJsonDocument::fromJson(answer.toUtf8());
+    QJsonObject *jsonObj = new QJsonObject(jsonResponse.object());
+
+    emit WeatherHourlyJsonReady(jsonObj);
 }
 
 
