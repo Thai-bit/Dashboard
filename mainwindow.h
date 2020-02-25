@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 
 #include <httpmanager.h>
+#include <todolistmodel.h>
 #include <QMainWindow>
 #include <QTimer>
 #include <QTime>
@@ -22,8 +23,12 @@ public:
     QPixmap japan, japan1, japan2, japan3, japan4, japan5;
     QPixmap london, london1, london2, london3, london4, london5;
     QPixmap seattle, seattle1, seattle2, seattle3, seattle4, seattle5;
-
     void imageInput();
+
+
+
+
+
 
 
 private slots:
@@ -31,6 +36,9 @@ private slots:
        void processImage(QPixmap *);
        void processWeatherJson(QJsonObject *json);
        void processIcon(QPixmap *);
+       void processThreeHourIcon(QPixmap *);
+       void processSixHourIcon(QPixmap *);
+       void processNineHourIcon(QPixmap *);
        void processWeatherHourlyJson(QJsonObject *json);
 
 
@@ -42,7 +50,13 @@ private slots:
        void on_japanButton_clicked();
        void on_londonButton_clicked();
        void changeBackground();
+       void mapTransparent();
+       void on_clearMapButton_clicked();
 
+
+
+
+       void on_addToDoListButton_clicked();
 
 private:
     Ui::MainWindow *ui;
@@ -51,7 +65,11 @@ private:
     QTimer *londonTime;
     QTimer *japanTime;
     HTTPManager *httpManager;
+    ToDoListModel *model;
     int picCount = 0;
+
+
+
 
 
 

@@ -7,14 +7,25 @@ HTTPManager::HTTPManager(QObject *parent) : QObject(parent),
     imageDownloadManager(new QNetworkAccessManager),
     weatherApiManager(new QNetworkAccessManager),
     iconDownloadManager(new QNetworkAccessManager),
+    iconThreeHourDownloadManager(new QNetworkAccessManager),
+    iconSixHourDownloadManager(new QNetworkAccessManager),
+    iconNineHourDownloadManager(new QNetworkAccessManager),
     weatherHourlyApiManager(new QNetworkAccessManager)
+
+
 {
     connect(imageDownloadManager, SIGNAL(finished(QNetworkReply*)),
             this, SLOT(ImageDownloadedHandler(QNetworkReply*)));
     connect(weatherApiManager,SIGNAL(finished(QNetworkReply*)),
             this,SLOT(WeatherDownloadedHandler(QNetworkReply*)));
     connect(iconDownloadManager, SIGNAL(finished(QNetworkReply*)),
-            this, SLOT(iconDownloadedHandler(QNetworkReply*)));
+            this, SLOT(IconDownloadedHandler(QNetworkReply*)));
+    connect(iconThreeHourDownloadManager, SIGNAL(finished(QNetworkReply*)),
+            this, SLOT(IconThreeHourDownloadedHandler(QNetworkReply*)));
+    connect(iconSixHourDownloadManager, SIGNAL(finished(QNetworkReply*)),
+            this, SLOT(IconSixHourDownloadedHandler(QNetworkReply*)));
+    connect(iconNineHourDownloadManager, SIGNAL(finished(QNetworkReply*)),
+            this, SLOT(IconNineHourDownloadedHandler(QNetworkReply*)));
     connect(weatherHourlyApiManager, SIGNAL(finished(QNetworkReply*)),
             this, SLOT(WeatherHourlyDownloadHandler(QNetworkReply*)));
 }
@@ -25,6 +36,9 @@ HTTPManager::~HTTPManager()
     delete weatherApiManager;
     delete iconDownloadManager;
     delete weatherHourlyApiManager;
+    delete iconThreeHourDownloadManager;
+    delete iconSixHourDownloadManager;
+    delete iconNineHourDownloadManager;
 }
 
 void HTTPManager::sendImageRequest()
@@ -61,6 +75,30 @@ void HTTPManager::sendIconRequest(QString icon)
     request.setUrl(QUrl(address));
     iconDownloadManager->get(request);
 
+}
+
+void HTTPManager::sendThreeHourIconRequest(QString icon)
+{
+    QNetworkRequest request;
+    QString address = "http://openweathermap.org/img/wn/" + icon + "@2x.png";
+    request.setUrl(QUrl(address));
+    iconThreeHourDownloadManager->get(request);
+}
+
+void HTTPManager::sendSixHourIconRequest(QString icon)
+{
+    QNetworkRequest request;
+    QString address = "http://openweathermap.org/img/wn/" + icon + "@2x.png";
+    request.setUrl(QUrl(address));
+    iconSixHourDownloadManager->get(request);
+}
+
+void HTTPManager::sendNineHourIconRequest(QString icon)
+{
+    QNetworkRequest request;
+    QString address = "http://openweathermap.org/img/wn/" + icon + "@2x.png";
+    request.setUrl(QUrl(address));
+    iconNineHourDownloadManager->get(request);
 }
 
 void HTTPManager::sendWeatherHourlyRequest(QString zip)
@@ -101,7 +139,7 @@ void HTTPManager::WeatherDownloadedHandler(QNetworkReply *reply)
    emit WeatherJsonReady(jsonObj);
 }
 
-void HTTPManager::iconDownloadedHandler(QNetworkReply *reply)
+void HTTPManager::IconDownloadedHandler(QNetworkReply *reply)
 {
     if(reply->error()){
         qDebug() << reply->errorString();
@@ -113,6 +151,48 @@ void HTTPManager::iconDownloadedHandler(QNetworkReply *reply)
     reply->deleteLater();
 
     emit IconReady(image);
+}
+
+void HTTPManager::IconThreeHourDownloadedHandler(QNetworkReply *reply)
+{
+    if(reply->error()){
+        qDebug() << reply->errorString();
+        return;
+    }
+
+    QPixmap *image = new QPixmap();
+    image->loadFromData(reply->readAll());
+    reply->deleteLater();
+
+    emit IconThreeHourReady(image);
+}
+
+void HTTPManager::IconSixHourDownloadedHandler(QNetworkReply *reply)
+{
+    if(reply->error()){
+        qDebug() << reply->errorString();
+        return;
+    }
+
+    QPixmap *image = new QPixmap();
+    image->loadFromData(reply->readAll());
+    reply->deleteLater();
+
+    emit IconSixHourReady(image);
+}
+
+void HTTPManager::IconNineHourDownloadedHandler(QNetworkReply *reply)
+{
+    if(reply->error()){
+        qDebug() << reply->errorString();
+        return;
+    }
+
+    QPixmap *image = new QPixmap();
+    image->loadFromData(reply->readAll());
+    reply->deleteLater();
+
+    emit IconNineHourReady(image);
 }
 
 void HTTPManager::WeatherHourlyDownloadHandler(QNetworkReply *reply)

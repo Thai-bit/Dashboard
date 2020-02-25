@@ -19,5 +19,8 @@
         <file>images/seattle5.jpg</file>
         <file>images/seattle6.jpg</file>
         <file>images/seattle7.jpg</file>
+        <file>images/eye.png</file>
+        <file>images/clear1.png</file>
+        <file>images/add.png</file>
     </qresource>
 </RCC>

@@ -1,5 +1,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include "todolistmodel.h"
 
 #include <QJsonObject>
 #include <QJsonArray>
@@ -7,7 +8,9 @@
 #include <QGraphicsDropShadowEffect>
 #include <QGraphicsOpacityEffect>
 #include <QDate>
-
+#include <iostream>
+#include <QFileDialog>
+#include <QHeaderView>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -16,8 +19,9 @@ MainWindow::MainWindow(QWidget *parent)
       seattleTime(new QTimer),
       londonTime(new QTimer),
       japanTime(new QTimer),
+      httpManager(new HTTPManager),
+      model(new ToDoListModel(this))
 
-      httpManager(new HTTPManager)
 {
     ui->setupUi(this);
 
@@ -30,10 +34,23 @@ MainWindow::MainWindow(QWidget *parent)
     connect(japanTime, SIGNAL(timeout()),
             this, SLOT(setjapanTime()));
 
+    // load images
     imageInput();
+    // set to currentime
     setSeattleTime();
+    //time interval for background switch
     timer->start(10000);
+    // switch background
     changeBackground();
+    //hide map initialize
+    ui->blurMapBackground->setStyleSheet("QLabel {background-color : transparent}");
+    //hide clear map button
+    ui->clearMapButton->setVisible(false);
+    //start default zipcode
+    on_locationButton_clicked();
+    // tableview
+    ui->tableView->setModel(model);
+    ui->tableView->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
 
 
 
@@ -49,61 +66,77 @@ MainWindow::MainWindow(QWidget *parent)
     //icon signal
     connect(httpManager, SIGNAL(IconReady(QPixmap *)),
             this, SLOT(processIcon(QPixmap *)));
+    connect(httpManager, SIGNAL(IconThreeHourReady(QPixmap *)),
+            this, SLOT(processThreeHourIcon(QPixmap *)));
+    connect(httpManager, SIGNAL(IconSixHourReady(QPixmap *)),
+            this, SLOT(processSixHourIcon(QPixmap *)));
+    connect(httpManager, SIGNAL(IconNineHourReady(QPixmap *)),
+            this, SLOT(processNineHourIcon(QPixmap *)));
 
     //enable MainWindow to be transparent
     setAttribute(Qt::WA_TranslucentBackground);
 
-    // add drop shadow effect to map
+
+    // add drop shadow effect to map & buttons
     QGraphicsDropShadowEffect* mapEffect = new QGraphicsDropShadowEffect();
     mapEffect->setBlurRadius(10);
-    ui->locationGroupBox->setGraphicsEffect(mapEffect);
+    ui->mapLabel->setGraphicsEffect(mapEffect);
     QGraphicsDropShadowEffect* locationEffect = new QGraphicsDropShadowEffect();
     locationEffect->setBlurRadius(10);
     ui->locationButton->setGraphicsEffect(locationEffect);
+    QGraphicsDropShadowEffect* zipCodeEffect = new QGraphicsDropShadowEffect();
+    zipCodeEffect->setBlurRadius(10);
+    ui->zipCodeEdit->setGraphicsEffect(zipCodeEffect);
     QGraphicsDropShadowEffect* jpanEffect = new QGraphicsDropShadowEffect();
     QGraphicsDropShadowEffect* seattleEffect = new QGraphicsDropShadowEffect();
     QGraphicsDropShadowEffect* londonEffect = new QGraphicsDropShadowEffect();
     QGraphicsDropShadowEffect* hourEffect = new QGraphicsDropShadowEffect();
     QGraphicsDropShadowEffect* minEffect = new QGraphicsDropShadowEffect();
     QGraphicsDropShadowEffect* secEffect = new QGraphicsDropShadowEffect();
+    QGraphicsDropShadowEffect* clearMapEffect = new QGraphicsDropShadowEffect();
     jpanEffect->setBlurRadius(10);
     seattleEffect->setBlurRadius(10);
     londonEffect->setBlurRadius(10);
     hourEffect->setBlurRadius(10);
     minEffect->setBlurRadius(10);
     secEffect->setBlurRadius(10);
+    clearMapEffect->setBlurRadius(10);
     ui->japanButton->setGraphicsEffect(jpanEffect);
     ui->seattleButton->setGraphicsEffect(seattleEffect);
     ui->londonButton->setGraphicsEffect(londonEffect);
     ui->hourLcd->setGraphicsEffect(hourEffect);
     ui->minuteLcd->setGraphicsEffect(minEffect);
     ui->secondLcd->setGraphicsEffect(secEffect);
+    ui->clearMapButton->setGraphicsEffect(clearMapEffect);
 
 
 
-    //opacity background
+    //opacity to background
     QGraphicsOpacityEffect* effect = new QGraphicsOpacityEffect();
     effect->setOpacity(0.4);
     ui->blurBackground->setGraphicsEffect(effect);
     QGraphicsOpacityEffect* effect1 = new QGraphicsOpacityEffect();
     effect1->setOpacity(0.4);
     ui->testLabel->setGraphicsEffect(effect1);
+    QGraphicsOpacityEffect* effect3 = new QGraphicsOpacityEffect();
+     effect3->setOpacity(0.4);
+     ui->zipcodeBlur->setGraphicsEffect(effect3);
+
+
+    //outline fonts
+
 
 
 
     //display current date
-
-    QString s = QDate::currentDate().toString("MMMM, dddd,dd\n");
+    QString s = QDate::currentDate().toString("dddd, MMMM dd\n");
     ui->dateLabel->setText(s);
 
 
 
-
-
-
-
-
 }
+
+
 
 MainWindow::~MainWindow()
 {
@@ -112,13 +145,14 @@ MainWindow::~MainWindow()
 
 
 
-// getting map picture
+
+// process map info
 void MainWindow::processImage(QPixmap *image)
 {
     ui->mapLabel->setPixmap(*image);
 }
 
-// getting weather info
+// process weather info
 void MainWindow::processWeatherJson(QJsonObject *json)
 {
       QString weather =  json->value("weather").toArray()[0].toObject()["main"].toString();
@@ -132,15 +166,23 @@ void MainWindow::processWeatherJson(QJsonObject *json)
 
 
 }
-// getting weather info every 3 hours
+
+
+// process weather info every 3 hours or forecast 4 days
 void MainWindow::processWeatherHourlyJson(QJsonObject *json)
 {
     QString weatherone = json->value("list").toArray()[0].toObject()["weather"].toArray()[0].toObject()["main"].toString();
     QString weathertwo = json->value("list").toArray()[1].toObject()["weather"].toArray()[0].toObject()["main"].toString();
     QString weatherthree = json->value("list").toArray()[2].toObject()["weather"].toArray()[0].toObject()["main"].toString();
-    double temp1 = json->value("list").toArray()[0].toObject()["temp"].toDouble();
-    double temp2 = json->value("list").toArray()[1].toObject()["temp"].toDouble();
-    double temp3 = json->value("list").toArray()[2].toObject()["temp"].toDouble();
+    QString getThreeHourIcon = json->value("list").toArray()[0].toObject()["weather"].toArray()[0].toObject()["icon"].toString();
+    QString getSixHourIcon = json->value("list").toArray()[1].toObject()["weather"].toArray()[0].toObject()["icon"].toString();
+    QString getNineHourIcon = json->value("list").toArray()[2].toObject()["weather"].toArray()[0].toObject()["icon"].toString();
+    httpManager->sendThreeHourIconRequest(getThreeHourIcon);
+    httpManager->sendSixHourIconRequest(getSixHourIcon);
+    httpManager->sendNineHourIconRequest(getNineHourIcon);
+    double temp1 = json->value("list").toArray()[0].toObject()["main"].toObject()["temp"].toDouble();
+    double temp2 = json->value("list").toArray()[1].toObject()["main"].toObject()["temp"].toDouble();
+    double temp3 = json->value("list").toArray()[2].toObject()["main"].toObject()["temp"].toDouble();
 
     ui->tempOneLabel->setText(QString::number(temp1) + "°F");
     ui->tempLabel2->setText(QString::number(temp2) + "°F");
@@ -150,14 +192,31 @@ void MainWindow::processWeatherHourlyJson(QJsonObject *json)
     ui->conditionLabel3->setText(weatherthree);
 }
 
+// process downloaded icon
 void MainWindow::processIcon(QPixmap *icon)
 {
     ui->iconLabel->setPixmap(*icon);
 }
 
+void MainWindow::processThreeHourIcon(QPixmap *icon)
+{
+    ui->threeHourLabel->setPixmap(*icon);
+}
+
+void MainWindow::processSixHourIcon(QPixmap *icon)
+{
+    ui->sixHourLabel->setPixmap(*icon);
+}
+
+void MainWindow::processNineHourIcon(QPixmap *icon)
+{
+    ui->nineHourLabel->setPixmap(*icon);
+}
+
 
 
 QString temp;
+
 //set timezone seattle
 void MainWindow::setSeattleTime()
 {
@@ -177,6 +236,15 @@ void MainWindow::setSeattleTime()
     if(japanTime->isActive()){
         japanTime->stop();
     }
+
+    if(hour.toInt() < 12){
+        ui->welcomeLabel->setText("Good Morning, Sir.");
+    } else if(hour.toInt() >= 12 && hour.toInt() < 18){
+        ui->welcomeLabel->setText("Good Afternoon, Sir.");
+    } else if (hour.toInt() > 18){
+        ui->welcomeLabel->setText("Good Evening, Sir.");
+    }
+
 
 }
 
@@ -200,7 +268,13 @@ void MainWindow::setLondonTime()
         japanTime->stop();
     }
 
-
+    if(hour.toInt() < 12){
+        ui->welcomeLabel->setText("Good Morning, Sir.");
+    } else if(hour.toInt() >= 12 && hour.toInt() < 18){
+        ui->welcomeLabel->setText("Good Afternoon, Sir.");
+    } else if (hour.toInt() > 18){
+        ui->welcomeLabel->setText("Good Evening, Sir.");
+    }
 
 }
 
@@ -224,10 +298,16 @@ void MainWindow::setjapanTime()
         londonTime->stop();
     }
 
-
+    if(hour.toInt() < 12){
+        ui->welcomeLabel->setText("Good Morning, Sir.");
+    } else if(hour.toInt() >= 12 && hour.toInt() < 18){
+        ui->welcomeLabel->setText("Afternoon, Sir.");
+    } else if (hour.toInt() > 18){
+        ui->welcomeLabel->setText("Evening, Sir.");
+    }
 }
 
-
+// change timezone to seattle
 void MainWindow::on_seattleButton_clicked()
 {
     picCount = 0;
@@ -236,11 +316,10 @@ void MainWindow::on_seattleButton_clicked()
     timer->stop();
     timer->start(10000);
 
-
-
-
 }
 
+
+//change timezone to japan
 void MainWindow::on_japanButton_clicked()
 {
     picCount = 0;
@@ -251,6 +330,7 @@ void MainWindow::on_japanButton_clicked()
 
 }
 
+// change timezone to london
 void MainWindow::on_londonButton_clicked()
 {
     picCount = 0;
@@ -262,6 +342,8 @@ void MainWindow::on_londonButton_clicked()
 
 }
 
+
+//change background with time interval
 void MainWindow::changeBackground()
 {
   if(seattleTime->isActive()){
@@ -326,8 +408,16 @@ void MainWindow::changeBackground()
 
 }
 
+void MainWindow::mapTransparent()
+{
+    ui->blurMapBackground->setStyleSheet("QLabel {background-color : rgb(120, 120, 120)}");
+    QGraphicsOpacityEffect* effect2 = new QGraphicsOpacityEffect();
+    effect2->setOpacity(0.4);
+    ui->blurMapBackground->setGraphicsEffect(effect2);
+}
 
 
+// search location using zipcode
 void MainWindow::on_locationButton_clicked()
 {
     QString zip = ui->zipCodeEdit->text();
@@ -335,11 +425,24 @@ void MainWindow::on_locationButton_clicked()
     httpManager->mapRequest(zip);
     httpManager->sendWeatherRequest(zip);
     httpManager->sendWeatherHourlyRequest(zip);
+    mapTransparent();
+    ui->clearMapButton->setVisible(true);
 
+
+}
+
+//clear map
+void MainWindow::on_clearMapButton_clicked()
+{
+    ui->blurMapBackground->setStyleSheet("QLabel {background-color : transparent}");
+    ui->mapLabel->clear();
+    ui->clearMapButton->setVisible(false);
 }
 
 
 
+
+// load images from directory
 void MainWindow::imageInput(){
     QString imageJapan = ":/images/japan1.jpg";
     QString imageJapan1 = ":/images/japan2.jpg";
@@ -419,12 +522,11 @@ void MainWindow::imageInput(){
 }
 
 
-
-
-
-
-
-
-
-
-
+void MainWindow::on_addToDoListButton_clicked()
+{
+    // open local file dialog
+    QString fileName = QFileDialog::getOpenFileName(this,
+                tr("Open Address Book"), "",
+                tr("Adress Book (*.csv);; All Files (*)"));
+    model->openFile(fileName);
+}
