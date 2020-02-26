@@ -686,7 +686,7 @@ border-radius:15px;</string>
      <string notr="true">    color: rgb(255,255, 255); </string>
     </property>
     <property name="text">
-     <string>Gretting label</string>
+     <string>Welcome message</string>
     </property>
     <property name="alignment">
      <set>Qt::AlignCenter</set>

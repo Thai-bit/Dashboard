@@ -10,7 +10,7 @@
 #include <QDate>
 #include <iostream>
 #include <QFileDialog>
-#include <QHeaderView>
+
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -158,6 +158,7 @@ void MainWindow::processWeatherJson(QJsonObject *json)
       ui->conditionLabel->setText(weather);
       ui->tempLabel->setText(QString::number(temp) + "°F");
 
+
 }
 
 
@@ -185,7 +186,6 @@ void MainWindow::processWeatherHourlyJson(QJsonObject *json)
     ui->conditionLabel3->setText(weatherthree);
 }
 
-
 // process downloaded icon
 void MainWindow::processIcon(QPixmap *icon)
 {
@@ -209,7 +209,6 @@ void MainWindow::processNineHourIcon(QPixmap *icon)
 
 
 
-QString temp;
 
 //set timezone seattle
 void MainWindow::setSeattleTime()
@@ -221,8 +220,6 @@ void MainWindow::setSeattleTime()
     ui->hourLcd->display(hour);
     ui->minuteLcd->display(minute);
     ui->secondLcd->display(second);
-
-    //switch time
     if(!seattleTime->isActive()){
     seattleTime->start(1000);
     }
@@ -233,12 +230,11 @@ void MainWindow::setSeattleTime()
         japanTime->stop();
     }
 
-    //welcome message
     if(hour.toInt() < 12){
         ui->welcomeLabel->setText("Good Morning, Sir.");
     } else if(hour.toInt() >= 12 && hour.toInt() < 18){
         ui->welcomeLabel->setText("Good Afternoon, Sir.");
-    } else if (hour.toInt() > 18){
+    } else if (hour.toInt() >= 18){
         ui->welcomeLabel->setText("Good Evening, Sir.");
     }
 
@@ -255,8 +251,6 @@ void MainWindow::setLondonTime()
     ui->hourLcd->display(hour);
     ui->minuteLcd->display(minute);
     ui->secondLcd->display(second);
-
-    //switch time
     if(!londonTime->isActive()){
         londonTime->start(1000);
     }
@@ -267,12 +261,11 @@ void MainWindow::setLondonTime()
         japanTime->stop();
     }
 
-    // welcome message
     if(hour.toInt() < 12){
         ui->welcomeLabel->setText("Good Morning, Sir.");
     } else if(hour.toInt() >= 12 && hour.toInt() < 18){
         ui->welcomeLabel->setText("Good Afternoon, Sir.");
-    } else if (hour.toInt() > 18){
+    } else if (hour.toInt() >= 18){
         ui->welcomeLabel->setText("Good Evening, Sir.");
     }
 
@@ -288,7 +281,6 @@ void MainWindow::setjapanTime()
     ui->hourLcd->display(hour);
     ui->minuteLcd->display(minute);
     ui->secondLcd->display(second);
-    //switch time
     if(!japanTime->isActive()){
         japanTime->start(1000);
     }
@@ -298,16 +290,15 @@ void MainWindow::setjapanTime()
     if(londonTime->isActive()){
         londonTime->stop();
     }
-    //welcome message
+
     if(hour.toInt() < 12){
         ui->welcomeLabel->setText("Good Morning, Sir.");
     } else if(hour.toInt() >= 12 && hour.toInt() < 18){
         ui->welcomeLabel->setText("Afternoon, Sir.");
-    } else if (hour.toInt() > 18){
+    } else if (hour.toInt() >= 18){
         ui->welcomeLabel->setText("Evening, Sir.");
     }
 }
-
 
 // change timezone to seattle
 void MainWindow::on_seattleButton_clicked()
@@ -317,7 +308,9 @@ void MainWindow::on_seattleButton_clicked()
     changeBackground();
     timer->stop();
     timer->start(10000);
+
 }
+
 
 //change timezone to japan
 void MainWindow::on_japanButton_clicked()
@@ -329,6 +322,7 @@ void MainWindow::on_japanButton_clicked()
     timer->start(10000);
 
 }
+
 // change timezone to london
 void MainWindow::on_londonButton_clicked()
 {
@@ -337,6 +331,8 @@ void MainWindow::on_londonButton_clicked()
     changeBackground();
     timer->stop();
     timer->start(10000);
+
+
 }
 
 
@@ -363,7 +359,6 @@ void MainWindow::changeBackground()
       }
 
   }
-
   if (londonTime->isActive()){
 
       if(picCount == 0){
@@ -384,7 +379,6 @@ void MainWindow::changeBackground()
           picCount = 0;
       }
   }
-
   if(japanTime->isActive()){
       if(picCount == 0){
           ui->backgroundLabel->setPixmap(japan);
@@ -407,7 +401,6 @@ void MainWindow::changeBackground()
 
 }
 
-// map opacity background
 void MainWindow::mapTransparent()
 {
     ui->blurMapBackground->setStyleSheet("QLabel {background-color : rgb(120, 120, 120)}");
@@ -438,18 +431,6 @@ void MainWindow::on_clearMapButton_clicked()
     ui->mapLabel->clear();
     ui->clearMapButton->setVisible(false);
 
-}
-
-// add to-do list
-void MainWindow::on_addToDoListButton_clicked()
-{
-    // open local file dialog
-    QString fileName = QFileDialog::getOpenFileName(this,
-                tr("Open Address Book"), "",
-                tr("Adress Book (*.csv);; All Files (*)"));
-    model->openFile(fileName);
-
-    ui->emptyLabel->clear();
 }
 
 
@@ -535,8 +516,16 @@ void MainWindow::imageInput(){
 }
 
 
+void MainWindow::on_addToDoListButton_clicked()
+{
+    // open local file dialog
+    QString fileName = QFileDialog::getOpenFileName(this,
+                tr("Open Address Book"), "",
+                tr("Adress Book (*.csv);; All Files (*)"));
+    model->openFile(fileName);
 
-
+    ui->emptyLabel->clear();
+}
 
 
 
