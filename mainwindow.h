@@ -26,11 +26,6 @@ public:
     void imageInput();
 
 
-
-
-
-
-
 private slots:
 
        void processImage(QPixmap *);
@@ -52,11 +47,13 @@ private slots:
        void changeBackground();
        void mapTransparent();
        void on_clearMapButton_clicked();
-
-
-
-
        void on_addToDoListButton_clicked();
+
+
+
+
+
+
 
 private:
     Ui::MainWindow *ui;
@@ -67,6 +64,7 @@ private:
     HTTPManager *httpManager;
     ToDoListModel *model;
     int picCount = 0;
+
 
 
 
